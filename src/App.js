@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
+import ValidationComponent from "./ValidationComponent/ValidationComponent";
+import CharComponent from "./CharComponent/CharComponent";
 import Person from "./Person/Person";
 class App extends Component {
   state = {
@@ -15,6 +17,8 @@ class App extends Component {
       { text1: "para 4", text2: "para 6" },
     ],
     username: "Jonas",
+    text: "",
+    length: 0,
   };
   changeUsernameHandler(ev) {
     this.setState({
@@ -55,6 +59,22 @@ class App extends Component {
       persons: persons,
     });
   }
+  outputText = (ev) => {
+    const p = document.querySelector("#outputText");
+    p.innerText = ev.target.value;
+
+    this.setState({
+      length: p.innerText.length,
+      text: p.innerText,
+    });
+  };
+  removeChar = (index) => {
+    let text = this.state.text;
+    text = text.slice(0, index) + text.slice(index + 1);
+    this.setState({
+      text: text,
+    });
+  };
   render() {
     const style = {
       backgroundColor: "white",
@@ -82,8 +102,19 @@ class App extends Component {
             );
           })}
         </div>
-
         <h1> Assignments</h1>
+        <input type="text" onChange={this.outputText} />
+        <p id="outputText"></p>
+        <ValidationComponent length={this.state.length} />
+        {this.state.text.split("").map((char, index) => {
+          return (
+            <CharComponent
+              char={char}
+              key={index}
+              clicked={this.removeChar.bind(this, index)}
+            />
+          );
+        })}
       </div>
     );
     // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Does this work now?'));
