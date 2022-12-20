@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
 import Person from "./Person/Person";
-
 class App extends Component {
   state = {
     persons: [
@@ -10,8 +9,18 @@ class App extends Component {
       { name: "Stephanie", age: 26 },
     ],
     otherState: "some other value",
+    outputs: [
+      { text1: "para 1", text2: "para 2" },
+      { text1: "para 3", text2: "para 4" },
+      { text1: "para 4", text2: "para 6" },
+    ],
+    username: "Jonas",
   };
-
+  changeUsernameHandler(ev) {
+    this.setState({
+      username: ev.target.value,
+    });
+  }
   switchNameHandler = (name) => {
     // console.log('Was clicked!');
     // DON'T DO THIS: this.state.persons[0].name = 'Maximilian';
@@ -23,7 +32,10 @@ class App extends Component {
       ],
     });
   };
-
+  //toggling the visibility of persons list
+  toggleVisibility = () => {
+    document.querySelector(".personsList").classList.toggle("hidden");
+  };
   //passing function to another component
   changeInputHandler(event) {
     this.setState({
@@ -46,27 +58,16 @@ class App extends Component {
       <div className="App">
         <h1>Hi, I'm a React App</h1>
         <p>This is really working!</p>
-        <button
-          style={style}
-          onClick={this.switchNameHandler.bind(this, "Samantha")}
-        >
-          Switch Name
+        <button style={style} onClick={this.toggleVisibility}>
+          Switch visibility
         </button>
-        <Person
-          name={this.state.persons[0].name}
-          age={this.state.persons[0].age}
-        />
-        <Person
-          name={this.state.persons[1].name}
-          age={this.state.persons[1].age}
-          changed={this.changeInputHandler.bind(this)}
-        >
-          My Hobbies: Racing
-        </Person>
-        <Person
-          name={this.state.persons[2].name}
-          age={this.state.persons[2].age}
-        />
+        <div className="personsList">
+          {this.state.persons.map((person) => (
+            <Person name={person.name} age={person.age} />
+          ))}
+        </div>
+
+        <h1> Assignments</h1>
       </div>
     );
     // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Does this work now?'));
