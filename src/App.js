@@ -4,9 +4,9 @@ import Person from "./Person/Person";
 class App extends Component {
   state = {
     persons: [
-      { name: "Max", age: 28 },
-      { name: "Manu", age: 29 },
-      { name: "Stephanie", age: 26 },
+      { id: "asdg21", name: "Max", age: 28 },
+      { id: "fdadw12", name: "Manu", age: 29 },
+      { id: "jtjt42", name: "Stephanie", age: 26 },
     ],
     otherState: "some other value",
     outputs: [
@@ -26,9 +26,9 @@ class App extends Component {
     // DON'T DO THIS: this.state.persons[0].name = 'Maximilian';
     this.setState({
       persons: [
-        { name: name, age: 28 },
-        { name: "Manu", age: 29 },
-        { name: "Stephanie", age: 27 },
+        { id: "asdg21", name: name, age: 28 },
+        { id: "fdadw12", name: "Manu", age: 29 },
+        { id: "jtjt42", name: "Stephanie", age: 27 },
       ],
     });
   };
@@ -36,17 +36,26 @@ class App extends Component {
   toggleVisibility = () => {
     document.querySelector(".personsList").classList.toggle("hidden");
   };
+
   //passing function to another component
-  changeInputHandler(event) {
+  changeInputHandler(id, event) {
+    const persons = [...this.state.persons];
+    const pIndex = persons.findIndex((p) => p.id === id);
+    persons[pIndex].name = event.target.value;
     this.setState({
-      persons: [
-        { name: "Max", age: 28 },
-        { name: event.target.value, age: 29 },
-        { name: "Stephanie", age: 27 },
-      ],
+      persons: persons,
     });
   }
 
+  removePerson(id) {
+    // find the clicked element
+    const persons = [...this.state.persons];
+    const pIndex = persons.findIndex((p) => p.id === id);
+    persons.splice(pIndex, 1);
+    this.setState({
+      persons: persons,
+    });
+  }
   render() {
     const style = {
       backgroundColor: "white",
@@ -62,9 +71,17 @@ class App extends Component {
           Switch visibility
         </button>
         <div className="personsList">
-          {this.state.persons.map((person) => (
-            <Person name={person.name} age={person.age} />
-          ))}
+          {this.state.persons.map((person, index) => {
+            return (
+              <Person
+                name={person.name}
+                age={person.age}
+                click={this.removePerson.bind(this, person.id)}
+                key={person.id}
+                changed={this.changeInputHandler.bind(this, person.id)}
+              />
+            );
+          })}
         </div>
 
         <h1> Assignments</h1>
