@@ -3,6 +3,21 @@ import "./App.css";
 import ValidationComponent from "./ValidationComponent/ValidationComponent";
 import CharComponent from "./CharComponent/CharComponent";
 import Person from "./Person/Person";
+import styled from "styled-components";
+
+const StyledButton = styled.button`
+  background-color: ${(props) => (props.alt ? "green" : "red")};
+  color: white;
+  border: 1px solid #b4b4b4;
+  cursor: pointer;
+  padding: 8px;
+
+  &:hover {
+    background-color: ${(props) => (props.alt ? "lightgreen" : "salmon")};
+    color: black;
+  }
+`;
+
 class App extends Component {
   state = {
     persons: [
@@ -10,12 +25,7 @@ class App extends Component {
       { id: "fdadw12", name: "Manu", age: 29 },
       { id: "jtjt42", name: "Stephanie", age: 26 },
     ],
-    otherState: "some other value",
-    outputs: [
-      { text1: "para 1", text2: "para 2" },
-      { text1: "para 3", text2: "para 4" },
-      { text1: "para 4", text2: "para 6" },
-    ],
+    showPersons: true,
     username: "Jonas",
     text: "",
     length: 0,
@@ -38,6 +48,10 @@ class App extends Component {
   //toggling the visibility of persons list
   toggleVisibility = () => {
     document.querySelector(".personsList").classList.toggle("hidden");
+    const status = this.state.showPersons;
+    this.setState({
+      showPersons: !status,
+    });
   };
 
   //passing function to another component
@@ -76,19 +90,16 @@ class App extends Component {
     });
   };
   render() {
-    const style = {
-      backgroundColor: "white",
-      border: "1px solid #b4b4b4",
-      cursor: "pointer",
-      padding: "8px",
-    };
     return (
       <div className="App">
         <h1>Hi, I'm a React App</h1>
         <p>This is really working!</p>
-        <button style={style} onClick={this.toggleVisibility}>
+        <StyledButton
+          alt={this.state.showPersons}
+          onClick={this.toggleVisibility}
+        >
           Switch visibility
-        </button>
+        </StyledButton>
         <div className="personsList">
           {this.state.persons.map((person, index) => {
             return (

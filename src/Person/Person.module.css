@@ -6,7 +6,16 @@
   padding: 16px;
   text-align: center;
 }
+@media (min-width: 500px) {
+  .Person {
+    width: 450px;
+  }
+}
+.Person input {
+  width: 70%;
+}
 
-.hidden {
+/* global class */
+:global .hidden {
   display: none;
 }
