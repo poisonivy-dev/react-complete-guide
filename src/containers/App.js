@@ -1,24 +1,12 @@
 import React, { Component } from "react";
 import "./App.css";
-import ValidationComponent from "./ValidationComponent/ValidationComponent";
-import CharComponent from "./CharComponent/CharComponent";
-import Person from "./Person/Person";
-import styled from "styled-components";
 
-const StyledButton = styled.button`
-  background-color: ${(props) => (props.alt ? "green" : "red")};
-  color: white;
-  border: 1px solid #b4b4b4;
-  cursor: pointer;
-  padding: 8px;
-
-  &:hover {
-    background-color: ${(props) => (props.alt ? "lightgreen" : "salmon")};
-    color: black;
-  }
-`;
+import Persons from "../components/Persons/Persons";
+import Cockpit from "../components/Cockpit.js/Cockpit";
+import Assignment from "../components/Assignment/Assignment";
 
 class App extends Component {
+  // State Property
   state = {
     persons: [
       { id: "asdg21", name: "Max", age: 28 },
@@ -45,6 +33,7 @@ class App extends Component {
       ],
     });
   };
+
   //toggling the visibility of persons list
   toggleVisibility = () => {
     document.querySelector(".personsList").classList.toggle("hidden");
@@ -54,7 +43,6 @@ class App extends Component {
     });
   };
 
-  //passing function to another component
   changeInputHandler(id, event) {
     const persons = [...this.state.persons];
     const pIndex = persons.findIndex((p) => p.id === id);
@@ -88,44 +76,33 @@ class App extends Component {
     this.setState({
       text: text,
     });
+    document.querySelector("#outputText").innerText = text;
+    document.querySelector("#outputInp").value = text;
   };
   render() {
     return (
       <div className="App">
-        <h1>Hi, I'm a React App</h1>
-        <p>This is really working!</p>
-        <StyledButton
-          alt={this.state.showPersons}
-          onClick={this.toggleVisibility}
-        >
-          Switch visibility
-        </StyledButton>
+        <Cockpit
+          clicked={this.toggleVisibility}
+          showPersons={this.state.showPersons}
+        />
+
         <div className="personsList">
-          {this.state.persons.map((person, index) => {
-            return (
-              <Person
-                name={person.name}
-                age={person.age}
-                click={this.removePerson.bind(this, person.id)}
-                key={person.id}
-                changed={this.changeInputHandler.bind(this, person.id)}
-              />
-            );
-          })}
+          <Persons
+            persons={this.state.persons}
+            clicked={this.removePerson}
+            changed={this.changeInputHandler}
+            this={this}
+          />
         </div>
-        <h1> Assignments</h1>
-        <input type="text" onChange={this.outputText} />
-        <p id="outputText"></p>
-        <ValidationComponent length={this.state.length} />
-        {this.state.text.split("").map((char, index) => {
-          return (
-            <CharComponent
-              char={char}
-              key={index}
-              clicked={this.removeChar.bind(this, index)}
-            />
-          );
-        })}
+
+        <Assignment
+          outputText={this.outputText}
+          length={this.state.length}
+          text={this.state.text}
+          this={this}
+          removeChar={this.removeChar}
+        />
       </div>
     );
     // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Does this work now?'));
