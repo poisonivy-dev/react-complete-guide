@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import React from "react";
+import Aux from "../Hoc/Auxilary";
 const StyledButton = styled.button`
   background-color: ${(props) => (props.alt ? "green" : "red")};
   color: white;
@@ -13,14 +14,25 @@ const StyledButton = styled.button`
   }
 `;
 const Cockpit = (props) => {
+  /*
+  either pass empty array as second parameter to run it once,
+  or pass the props that you want to check for using this effect
+    // useEffect(() => {
+  //   setTimeout(() => alert("Saved"), 1000);
+  // }, []);
+  // useEffect(() => {
+  //   setTimeout(() => alert("Saved"), 1000);
+  // }, [props.showPersons]);
+  */
+
   return (
-    <div>
+    <Aux>
       <h1>Hi, I'm a React App</h1>
       <p>This is really working!</p>
       <StyledButton alt={props.showPersons} onClick={props.clicked}>
         Switch visibility
       </StyledButton>
-    </div>
+    </Aux>
   );
 };
 

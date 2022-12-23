@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
+import WithClass from "../components/Hoc/WithClass";
 
 import Persons from "../components/Persons/Persons";
 import Cockpit from "../components/Cockpit.js/Cockpit";
@@ -81,7 +82,7 @@ class App extends Component {
   };
   render() {
     return (
-      <div className="App">
+      <WithClass classes="App">
         <Cockpit
           clicked={this.toggleVisibility}
           showPersons={this.state.showPersons}
@@ -103,7 +104,7 @@ class App extends Component {
           this={this}
           removeChar={this.removeChar}
         />
-      </div>
+      </WithClass>
     );
     // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Does this work now?'));
   }
