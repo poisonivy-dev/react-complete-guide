@@ -1,12 +1,16 @@
 import React, { Component } from "react";
 import "./App.css";
 import WithClass from "../components/Hoc/WithClass";
-
+import AuthContext from "../context/auth-context";
 import Persons from "../components/Persons/Persons";
 import Cockpit from "../components/Cockpit.js/Cockpit";
 import Assignment from "../components/Assignment/Assignment";
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.personsListEl = React.createRef();
+  }
   // State Property
   state = {
     persons: [
@@ -18,6 +22,7 @@ class App extends Component {
     username: "Jonas",
     text: "",
     length: 0,
+    isAuthentication: false,
   };
   changeUsernameHandler(ev) {
     this.setState({
@@ -37,7 +42,7 @@ class App extends Component {
 
   //toggling the visibility of persons list
   toggleVisibility = () => {
-    document.querySelector(".personsList").classList.toggle("hidden");
+    this.personsListEl.current.classList.toggle("hidden");
     const status = this.state.showPersons;
     this.setState({
       showPersons: !status,
@@ -80,22 +85,34 @@ class App extends Component {
     document.querySelector("#outputText").innerText = text;
     document.querySelector("#outputInp").value = text;
   };
+  loginHandler = () => {
+    this.setState({
+      isAuthentication: true,
+    });
+  };
   render() {
     return (
       <WithClass classes="App">
-        <Cockpit
-          clicked={this.toggleVisibility}
-          showPersons={this.state.showPersons}
-        />
-
-        <div className="personsList">
-          <Persons
-            persons={this.state.persons}
-            clicked={this.removePerson}
-            changed={this.changeInputHandler}
-            this={this}
+        <AuthContext.Provider
+          value={{
+            isAuthentication: this.state.isAuthentication,
+            login: this.loginHandler,
+          }}
+        >
+          <Cockpit
+            clicked={this.toggleVisibility}
+            showPersons={this.state.showPersons}
           />
-        </div>
+
+          <div ref={this.personsListEl} className="personsList">
+            <Persons
+              persons={this.state.persons}
+              clicked={this.removePerson}
+              changed={this.changeInputHandler}
+              this={this}
+            />
+          </div>
+        </AuthContext.Provider>
 
         <Assignment
           outputText={this.outputText}

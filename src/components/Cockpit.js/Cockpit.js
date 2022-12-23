@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import React from "react";
 import Aux from "../Hoc/Auxilary";
+import AuthContext from "../../context/auth-context";
 const StyledButton = styled.button`
   background-color: ${(props) => (props.alt ? "green" : "red")};
   color: white;
@@ -32,6 +33,11 @@ const Cockpit = (props) => {
       <StyledButton alt={props.showPersons} onClick={props.clicked}>
         Switch visibility
       </StyledButton>
+      <AuthContext.Consumer>
+        {(context) => {
+          return <button onClick={context.login}>Login</button>;
+        }}
+      </AuthContext.Consumer>
     </Aux>
   );
 };
